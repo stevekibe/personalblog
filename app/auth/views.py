@@ -6,7 +6,7 @@ from .forms import RegistrationForm, LoginForm
 from .. import db
 
 
-@auth.route('templates/auth/reqister',methods=['GET','POST'])
+@auth.route('/register',methods=['GET','POST'])
 def register():
     '''
     method to register the user
