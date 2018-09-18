@@ -12,7 +12,7 @@ class config:
     # MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
 
 class ProdConfig(config):
-    # SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
     SECRET_KEY = os.environ.get("SECRET_KEY")
 
 class DevConfig(config):

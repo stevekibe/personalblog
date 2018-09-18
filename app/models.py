@@ -109,9 +109,9 @@ class Comments(db.Model):
         db.session.commit()
 
     @classmethod
-    def get_comments(self, id):
-        comment = Comments.query.order_by(
-            Comments.time_posted.desc()).filter_by(blogs_id=id).all()
+    def get_comments(id):
+        comment = Blog.query.filter_by(blog_id=id).all()
+        Comments.time_posted.desc()).filter_by(blogs_id=id).all()
     
         return comment
     
