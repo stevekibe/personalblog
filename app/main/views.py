@@ -1,7 +1,8 @@
 from flask import render_template, request, redirect, url_for, abort
 from . import main
 from .. import db
-from ..models import User
+from ..models import User,BlogCategory,Comments,Blog
+from . forms import BlogForm,CommentForm,BlogcategoryForm
 from flask_login import login_required,current_user
 
 
@@ -10,71 +11,71 @@ def index():
     '''
     method to the root page
     ''' 
-    
+    blogcategory = BlogCategory.get_blogcategories()
 
     title = 'Home- Welcome'
     return render_template('index.html', title = title,)
 
-@main.route('/category/new-pitch/<int:id>', methods=['GET', 'POST'])
+@main.route('/blogcategory/new-blog/<int:id>', methods=['GET', 'POST'])
 @login_required
-def new_pitch(id):
+def new_blog(id):
     ''' 
-    method to form a new pitch
+    method to form a new blog
     '''
-    form = PitchForm()
-    category = PitchCategory.query.filter_by(id=id).first()
+    form = BlogForm()
+    blogcategory = BlogCategory.query.filter_by(id=id).first()
 
-    if category is None:
+    if blogcategory is None:
         abort(404)
 
     if form.validate_on_submit():
         content = form.content.data
-        new_pitch= Pitch(content=content,category_id= category.id,user_id=current_user.id)
-        new_pitch.save_pitch()
-        return redirect(url_for('.category', id=category.id))
+        new_blog= Blog(content=content,blogcategory_id= blogcategory.id,user_id=current_user.id)
+        new_blog.save_blog()
+        return redirect(url_for('.blogcategory', id=blogcategory.id))
 
-    return render_template('new_pitch.html', pitch_form=form, category=category)
+    return render_template('new_blog.html', blog_form=form, blogcategory=blogcategory)
 
-@main.route('/categories/<int:id>')
-def category(id):
-    category = PitchCategory.query.get(id)
-    if category is None:
+@main.route('/blogcategories/<int:id>')
+def blogcategory(id):
+    blogcategory = BlogCategory.query.get(id)
+    if blogcategory is None:
         abort(404)
 
-    pitches=Pitch.get_pitches(id)
-    return render_template('category.html', pitches=pitches, category=category)
+    blogs=Blog.get_blogs(id)
+    return render_template('category.html', blogs=blogs, blogcategory=blogcategory)
 
-@main.route('/add/category', methods=['GET','POST'])
+@main.route('/add/blogcategory', methods=['GET','POST'])
 @login_required
-def new_category():
+def new_blogcategory():
     '''
-    method for creating new category
+    method for creating new blogcategory
     '''
-    form = CategoryForm()
+    form = cBlogcategoryForm()
     if form.validate_on_submit():
         name = form.name.data
-        new_category = PitchCategory(name=name)
-        new_category.save_category()
+        new_blogcategory = BlogCategory(name=name)
+        new_blogcategory.save_blogcategory()
 
         return redirect(url_for('.index'))
 
     title = 'New category'
-    return render_template('new_category.html', category_form = form,title=title)
+    return render_template('new_blogcategory.html', blogcategory_form = form,title=title)
 
 @main.route('/view-pitch/<int:id>', methods=['GET', 'POST'])
 @login_required
-def view_pitch(id):
+def view_blog(id):
     '''
-    method to view a pitch
+    method to view a blog
     '''
     print(id)
-    pitches = Pitch.query.get(id)
+    blogs = Blog.query.get(id)
     
-    if pitches is None:                                                                                                                                                                                                                           
+    if blogs is None:                                                                                                                                                                                                                           
         abort(404)
     
     comment = Comments.get_comments(id)
-    return render_template('view.html', pitches=pitches, comment=comment, category_id=id)
+    return render_template('view.html', blogs=blogs, comment=comment, category_id=id)
 
 @main.route('/write_comment/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -84,15 +85,15 @@ def post_comment(id):
     '''
     form = CommentForm()
     title = ' Comment'
-    pitches = Pitch.query.filter_by(id=id).first()
+    blogs = Blog.query.filter_by(id=id).first()
 
-    if pitches is None:
+    if blogs is None:
          abort(404)
 
     if form.validate_on_submit():
         opinion = form.opinion.data
-        new_comment = Comments(opinion=opinion, user_id=current_user.id, pitches_id=pitches.id)
+        new_comment = Comments(opinion=opinion, user_id=current_user.id, blogs_id=blogs.id)
         new_comment.save_comment()
-        return redirect(url_for('.view_pitch', id=pitches.id))
+        return redirect(url_for('.view_blog', id=blogs.id))
    
     return render_template('post-comment.html', comment_form=form, title=title)
