@@ -43,9 +43,9 @@ class BlogCategory(db.Model):
     '''
     __tablename__ = 'blogcategories'
 
-    id = db.Column(db.Interger, primary_key = True)
-    name = db.column(db.string(255))
-    description = db.column(db.string(255))
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(255))
+    description = db.Column(db.String(255))
     def save_blogcategory(self):
         '''
         saving the categories
@@ -58,17 +58,17 @@ class BlogCategory(db.Model):
         blogcategories = BlogCategory.query.all()
         return blogcategories
 
-    class Blog(db.Model):
-        '''
-        blog class
-        '''
-        __tablename__ = 'blogs'
+class Blog(db.Model):
+    '''
+    blog class
+    '''
+    __tablename__ = 'blogs'
 
-        id = db.Column(db.Integer,primary_key= True)
-        content = db.Column(db.String)
-        blogcategory_id = db.Column(db.Integer, db.ForeignKey("blogcategories.id"))
-        user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
-        comment = db.relationship("Comments", backref="blogs", lazy= "dynamic")
+    id = db.Column(db.Integer,primary_key= True)
+    content = db.Column(db.String)
+    blogcategory_id = db.Column(db.Integer, db.ForeignKey("blogcategories.id"))
+    user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
+    comment = db.relationship("Comments", backref="blogs", lazy= "dynamic")
         
 
     def save_blog(self):
@@ -86,7 +86,7 @@ class BlogCategory(db.Model):
         '''
         method for displaying pitches
         '''
-        blogs = Blog.query.filter_by(category_id=id).all()
+        blogs = Blog.query.filter_by(blogcategory_id=id).all()
         return blogs
 
 class Comments(db.Model):
@@ -111,7 +111,7 @@ class Comments(db.Model):
     @classmethod
     def get_comments(self, id):
         comment = Comments.query.order_by(
-            Comments.time_posted.desc()).filter_by(pitches_id=id).all()
+            Comments.time_posted.desc()).filter_by(blogs_id=id).all()
     
         return comment
     

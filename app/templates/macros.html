@@ -1,7 +1,7 @@
 {% macro displayBlogcategoryList(blogcategory_list) %}
-    {% for category in category_list%}
+    {% for blogcategory in blogcategory_list%}
     <div>
-        <a href="{{url_for('.blogcategory', id=blogcategory.id)}}">{{Blogcategory.name|upper}}</a>
+        <a href="{{url_for('.blogcategory', id=blogcategory.id)}}">{{blogcategory.name|upper}}</a>
     </div>
     {%endfor%}
 {%endmacro%}

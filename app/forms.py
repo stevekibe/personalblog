@@ -4,9 +4,9 @@ from wtforms.validators import Required
 
 class BlogForm(FlaskForm):
     '''
-    Class to create a pitch
+    Class to create a blog
     '''
-    content = TextAreaField('YOUR PITCH')
+    content = TextAreaField('YOUR BLOG')
     submit = SubmitField('SUBMIT')
 
 class CommentForm(FlaskForm):

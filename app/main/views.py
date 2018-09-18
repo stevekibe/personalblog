@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, abort
 from . import main
 from .. import db
 from ..models import User,BlogCategory,Comments,Blog
-from . forms import BlogForm,CommentForm,BlogcategoryForm
+from ..forms import BlogForm,CommentForm,BlogcategoryForm
 from flask_login import login_required,current_user
 
 
@@ -14,7 +14,7 @@ def index():
     blogcategory = BlogCategory.get_blogcategories()
 
     title = 'Home- Welcome'
-    return render_template('index.html', title = title,)
+    return render_template('index.html', title = title, blogcategories=blogcategory)
 
 @main.route('/blogcategory/new-blog/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -51,7 +51,7 @@ def new_blogcategory():
     '''
     method for creating new blogcategory
     '''
-    form = cBlogcategoryForm()
+    form = BlogcategoryForm()
     if form.validate_on_submit():
         name = form.name.data
         new_blogcategory = BlogCategory(name=name)
@@ -75,7 +75,7 @@ def view_blog(id):
         abort(404)
     
     comment = Comments.get_comments(id)
-    return render_template('view.html', blogs=blogs, comment=comment, category_id=id)
+    return render_template('view.html', blogs=blogs, comment=comment, blogcategory_id=id)
 
 @main.route('/write_comment/<int:id>', methods=['GET', 'POST'])
 @login_required
