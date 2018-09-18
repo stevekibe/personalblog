@@ -65,4 +65,54 @@ class BlogCategory(db.Model):
         __tablename__ = 'blogs'
 
         id = db.Column(db.Integer,primary_key)
+         content = db.Column(db.String)
+    category_id = db.Column(db.Integer, db.ForeignKey("categories.id"))
+    user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
+    comment = db.relationship("Comments", backref="pitches", lazy= "dynamic")
+    vote = db.relationship("Votes", backref="pitches", lazy= "dynamic")
 
+
+    def save_pitch(self):
+        '''
+        method for saving a pitch
+        '''
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def clear_pitches(cls):
+        Pitch.all_pitches.clear()
+
+    def get_pitches(id):
+        '''
+        method for displaying pitches
+        '''
+        pitches = Pitch.query.filter_by(category_id=id).all()
+        return pitches
+
+class Comments(db.Model):
+    '''
+    class for comments
+    '''
+    __tablename__= 'comments'
+
+    id = db.Column(db.Integer, primary_key = True)
+    opinion = db.Column(db.String(255))
+    time_posted = db.Column(db.DateTime, default= datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    pitches_id = db.Column(db.Integer, db.ForeignKey("pitches.id"))
+
+    def save_comment(self):
+        '''
+        method for saving a comment
+        '''
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def get_comments(self, id):
+        comment = Comments.query.order_by(
+            Comments.time_posted.desc()).filter_by(pitches_id=id).all()
+    
+        return comment
+    
