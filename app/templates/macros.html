@@ -14,7 +14,7 @@
         <div class="col-md-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h4>{{ macro.displayCategoryList(categories) }}</h4>
+                    <h4>{{ macro.displayBlogcategoryList(blogcategories) }}</h4>
                 </div>
                 <div class="panel-body">
                     
@@ -29,17 +29,17 @@
 
 
 {% endblock %}
-{% macro displayPitches(pitch_list) %}
-  {% for pitches in pitch_list %}
+{% macro displayBlogs(blog_list) %}
+  {% for blogs in blog_list %}
     <div class="col-md-6">
       <div class="well">
         <div class="row">
           <div class="col-md-6">
-              <h3>{{pitches.content}}</h3>
+              <h3>{{blogs.content}}</h3>
           </div>
           <div class="col-md-6">
-            <p>POSTED: {{pitches.date_posted.strftime('%Y/%m/%d || %r')}}</p>
-            <a href="/pitch/{{pitches.id}}"><h4>COMMENT</h4></a>
+            <p>POSTED: {{blogs.date_posted.strftime('%Y/%m/%d || %r')}}</p>
+            <a href="/blog/{{blogs.id}}"><h4>COMMENT</h4></a>
           </div>
         </div>
       </div>
