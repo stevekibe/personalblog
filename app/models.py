@@ -19,9 +19,9 @@ class User (UserMixin, db.Model):
     pass_secure = db.Column(db.String(255))
     bio = db.Column(db.String(255))
     profile_pic_path = db.Column(db.String())
-    # pitches = db.relationship("Pitch", backref="user", lazy= "dynamic")
-    # comment = db.relationship("Comments", backref="user", lazy= "dynamic")
-    # vote = db.relationship("Votes", backref="user", lazy= "dynamic")
+    blog = db.relationship("Blog", backref="user", lazy= "dynamic")
+    comment = db.relationship("Comments", backref="user", lazy= "dynamic")
+    
 
     
     @property
@@ -64,15 +64,14 @@ class BlogCategory(db.Model):
         '''
         __tablename__ = 'blogs'
 
-        id = db.Column(db.Integer,primary_key)
-         content = db.Column(db.String)
-    category_id = db.Column(db.Integer, db.ForeignKey("categories.id"))
-    user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
-    comment = db.relationship("Comments", backref="pitches", lazy= "dynamic")
-    vote = db.relationship("Votes", backref="pitches", lazy= "dynamic")
+        id = db.Column(db.Integer,primary_key= True)
+        content = db.Column(db.String)
+        blogcategory_id = db.Column(db.Integer, db.ForeignKey("blogcategories.id"))
+        user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
+        comment = db.relationship("Comments", backref="blogs", lazy= "dynamic")
+        
 
-
-    def save_pitch(self):
+    def save_blog(self):
         '''
         method for saving a pitch
         '''
@@ -80,15 +79,15 @@ class BlogCategory(db.Model):
         db.session.commit()
 
     @classmethod
-    def clear_pitches(cls):
-        Pitch.all_pitches.clear()
+    def clear_blogs(cls):
+        Blog.all_blogs.clear()
 
-    def get_pitches(id):
+    def get_blogs(id):
         '''
         method for displaying pitches
         '''
-        pitches = Pitch.query.filter_by(category_id=id).all()
-        return pitches
+        blogs = Blog.query.filter_by(category_id=id).all()
+        return blogs
 
 class Comments(db.Model):
     '''
@@ -100,7 +99,7 @@ class Comments(db.Model):
     opinion = db.Column(db.String(255))
     time_posted = db.Column(db.DateTime, default= datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    pitches_id = db.Column(db.Integer, db.ForeignKey("pitches.id"))
+    blogs_id = db.Column(db.Integer, db.ForeignKey("blogs.id"))
 
     def save_comment(self):
         '''
