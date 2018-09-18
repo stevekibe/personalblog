@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField,TextAreaField,SubmitField,SelectField
 from wtforms.validators import Required
 
-class PitchForm(FlaskForm):
+class BlogForm(FlaskForm):
     '''
     Class to create a pitch
     '''
@@ -16,7 +16,7 @@ class CommentForm(FlaskForm):
     opinion = TextAreaField('WRITE COMMENT')
     submit = SubmitField('SUBMIT')
 
-class CategoryForm(FlaskForm):
+class BlogcategoryForm(FlaskForm):
     '''
     Class to create a category
     '''
