@@ -111,7 +111,7 @@ class Comments(db.Model):
     @classmethod
     def get_comments(id):
         comment = Blog.query.filter_by(blog_id=id).all()
-        Comments.time_posted.desc()).filter_by(blogs_id=id).all()
+        #Comments.time_posted.desc()).filter_by(blogs_id=id).all()
     
         return comment
     
